@@ -78,3 +78,4 @@ six
 Werkzeug
 wrapt
 xattr
+gunicorn
