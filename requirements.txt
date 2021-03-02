@@ -5,6 +5,13 @@ backports.functools-lru-cache
 bdist-mpkg
 cffi
 click
+Cors
+Threading
+thread
+event
+time
+sleep
+json
 configparser
 cryptography
 dnspython
