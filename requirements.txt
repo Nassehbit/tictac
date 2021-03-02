@@ -6,7 +6,7 @@ bdist-mpkg
 cffi
 click
 Cors
-Threading
+threading
 thread
 event
 time
