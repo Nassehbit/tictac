@@ -3,6 +3,7 @@ asn1crypto
 astroid
 backports.functools-lru-cache
 bdist-mpkg
+bonjour-py
 cffi
 click
 configparser
