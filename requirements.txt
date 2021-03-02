@@ -6,7 +6,6 @@ bdist-mpkg
 cffi
 click
 Cors
-thread
 event
 time
 sleep
