@@ -11,7 +11,7 @@ import qs from 'qs'
 import socketIOClient from 'socket.io-client';
 import Visitors from '../functional/Visitor';
 
-const ENDPOINT = 'http://127.0.0.1:5000'
+const ENDPOINT = 'http://127.0.0.1:8081'
 const socket = socketIOClient(ENDPOINT, {reconnection: true})
 
 
@@ -51,6 +51,7 @@ export default function Board(props) {
       handleUpdate(board, pieceParam)
     })
     socket.on('win', (winner) => {
+      console.log(winner);
       setStatusMessage(`${winner} wins`)
       setEnd(true)
     })
@@ -59,7 +60,7 @@ export default function Board(props) {
       setEnd(true)
     })
     socket.on('again', () => {
-      setRedirect(true)
+      setRedirect(false)
     })
     socket.on('visitors', (visitors) => {
       setVisitors(visitors)
@@ -172,6 +173,7 @@ export default function Board(props) {
       const newSquare = renderSquare(i)
       squareArray.push(newSquare)
     }
+    console.log(squareArray);
     return (
       <>
         <Wait display={waiting}/>

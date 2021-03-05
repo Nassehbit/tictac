@@ -1,14 +1,17 @@
 from flask_socketio import SocketIO, emit
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory,request
 from flask_cors import CORS
 from random import random
 from threading import Thread, Event
 from time import sleep
 import json
 import os
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__, static_folder='./build/static')
-app.config['SECRET_KEY'] = 'secret!'
+app = Flask(__name__)
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
@@ -51,6 +54,17 @@ def newGame(name):
     
     socketio.emit('newGameCreated')
 
+
+@socketio.on('newGame')
+def newGame(name):
+    global gameStatus
+    global players
+    gameStatus = True
+    players.append(name)
+    
+    socketio.emit('newGameCreated')
+
+# @socketio.on('checkexistingplayer')
 @socketio.on('joining')
 def joining(name):
     global players
@@ -107,6 +121,6 @@ def playAgainRequest():
     players = []
     visitors = []
     board = [None,None,None,None,None,None,None,None,None]
-    socketio.emit('again')
+    socketio.emit('again',data = (players))
 if __name__ == '__main__':
     socketio.run(app, debug=False,host=os.getenv('IP', '0.0.0.0'),port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)))
