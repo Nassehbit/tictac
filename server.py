@@ -9,14 +9,15 @@ import json
 import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
-
+import config
 
 app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
+app.config.from_object(config.DevelopmentConfig)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 import  models
+
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
