@@ -144,7 +144,7 @@ def leaderboard():
     except Exception as e:
 	    return(str(e))
   
-
+# edn]
 
 @socketio.on('newRoomJoin')
 def newRoomJoin():
