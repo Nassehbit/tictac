@@ -22,7 +22,7 @@ export default function Board(props) {
   const [statusMessage, setStatusMessage] = useState('')
   const [waiting, setWaiting] = useState(false)
   const [players, setPlayers] = useState(['', ''])
-  const [scores] = useState([0, 0])
+  const [scores,setScores] = useState([1, 0])
   const [redirect, setRedirect] = useState(false)
   const [visitors, setVisitors] = useState([])
   const [piece, setPiece] = useState('X')
@@ -31,14 +31,19 @@ export default function Board(props) {
   })
 
   useEffect(() => {
-        socket.emit('newRoomJoin')
-    socket.on('waiting', () => {
+    socket.emit('newRoomJoin')
+    socket.on('waiting', (player) => {
+      console.log(player);
       setWaiting(true)
     })
 
     socket.on('starting', (players, visitors) => {
+      console.log(players);
       setPlayers(players)
       setVisitors(visitors)
+      
+      setScores(scores)
+
       setTurn(permission === 'new' ? true : false)
       console.log(permission)
       setPiece(permission === 'new' ? 'O' : 'X')
@@ -52,18 +57,25 @@ export default function Board(props) {
     })
     socket.on('win', (winner) => {
       console.log(winner);
-      setStatusMessage(`${winner} wins`)
+      setStatusMessage(`${winner.name} wins`)
       setEnd(true)
     })
     socket.on('over', () => {
       setStatusMessage('Game over')
       setEnd(true)
     })
-    socket.on('again', () => {
+    socket.on('again', (board) => {
+      console.log('REDIRECT');
+      setEnd(false)
       setRedirect(false)
+      funcSetBoard(board)
     })
     socket.on('visitors', (visitors) => {
       setVisitors(visitors)
+    })
+    socket.on('leaderboard', () => {
+      setStatusMessage('LEADERBOARD')
+      setEnd(true)
     })
   }, [piece])
 
@@ -76,11 +88,19 @@ export default function Board(props) {
 
   //Setting the states each move when the game haven't ended (no wins or draw)
   function handleUpdate(board, pieceParam) {
+   
     funcSetBoard(board)
+    
     funcSetTurn(pieceParam)
+  
     if (handleWin(board)) {
+      alert(piece, "FORRRRR PIECE")
+      alert(pieceParam, "FORRRRR PIECE")
+      console.log(players)
       var winner = piece === 'O' ? players[0] : players[1]
+
       socket.emit('win', winner)
+      
     } else if (handleOver(board)) {
       socket.emit('over')
     } else {
@@ -106,6 +126,7 @@ export default function Board(props) {
     ]
     for (var i = 0; i < winStates.length; i++) {
       var winstate = winStates[i];
+      console.log(piece)
       if (board[winstate[0]] === piece
         && board[winstate[1]] === piece
         && board[winstate[2]] === piece) {
@@ -117,16 +138,18 @@ export default function Board(props) {
   }
 
   const playAgainRequest = () => {
+    console.log('requestfor playagain');
+
     socket.emit('playAgainRequest')
   }
 
   //Handle the restart event from the back end
-  function handleRestart(gameState, turn) {
-    funcSetBoard(gameState)
-    funcSetTurn(turn)
-    funcSetMessage()
-    setEnd(false)
-  }
+  // function handleRestart(gameState, turn) {
+  //   funcSetBoard(gameState)
+  //   funcSetTurn(turn)
+  //   funcSetMessage()
+  //   setEnd(false)
+  // }
 
   //Some utilities methods to set the states of the board
 
@@ -173,6 +196,7 @@ export default function Board(props) {
       const newSquare = renderSquare(i)
       squareArray.push(newSquare)
     }
+    
     console.log(squareArray);
     return (
       <>
@@ -181,7 +205,7 @@ export default function Board(props) {
         <div className="board">
           {squareArray}
         </div>
-        <ScoreBoard data={{player1: [players[0], scores[0]], player2: [players[1], scores[1]]}}/>
+        <ScoreBoard data={{player1: [players[0]['name'], players[0]['score']], player2: [players[1]['name'],players[1]['scores']]}}/>
         <Visitors visitors={visitors}/>
         <PlayAgain end={end} onClick={playAgainRequest}/>
       </>
