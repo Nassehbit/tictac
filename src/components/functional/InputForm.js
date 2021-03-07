@@ -1,9 +1,9 @@
-import React , { Component, useEffect, useState }from 'react';
+import React , {  useEffect, useState }from 'react';
 
 import Input from './Input.js'
 import ChoiceButton from './ChoiceButton'
 
-import ScoreBoard from '../functional/ScoreBoard'
+
 
 import ScoreBoardleader from '../functional/scoreboardleader'
 // import socket from '../pages/Board'
@@ -15,7 +15,7 @@ const socket = socketIOClient(ENDPOINT, {reconnection: false})
 const InputForm = (props) => {
   // const [players, setPlayers] = useState([{'name': 'edu', 'score': 100}, {'name': 'nasseh', 'score': 100}])
     const [players, setPlayers] = useState([])
-    const [scores,setScores] = useState([1, 0])
+    // const [scores,setScores] = useState([1, 0])
 
     const {stepBack, onSubmit, onTyping, newGame, name,} = props
     console.log(`${newGame} dwejkhbdweydkwveykdgv`);
@@ -30,7 +30,7 @@ const InputForm = (props) => {
         // console.log(setPlayers);
         console.log();
       })
-    },[])
+    })
     if (newGame === 'new'){
       console.log('NEEWWEWEWE') 
         return (
@@ -67,7 +67,11 @@ const InputForm = (props) => {
       socket.emit('leaderboard')
       console.log(players);
       return (
-        <ScoreBoardleader data={players}/>
+        <div className='nav-container'>
+                    <ScoreBoardleader data={players}/>
+        <ChoiceButton type='nav-back' choice='back' onChoice={stepBack} label='Back'/>
+                </div>
+       
       );
   } else {
       return (

@@ -29,6 +29,9 @@ export default function Start(props) {
     console.log('useEffect')
     socket.on('newGameCreated', () => {
       console.log('newGameCreated')
+
+      // alert('NEW GAME CREATED')
+
       setServerConfirmed(true)
     })
     socket.on('joinConfirmed', (players) => {

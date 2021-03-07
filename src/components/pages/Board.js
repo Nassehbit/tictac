@@ -14,7 +14,6 @@ import Visitors from '../functional/Visitor';
 const ENDPOINT = 'http://127.0.0.1:8081'
 const socket = socketIOClient(ENDPOINT, {reconnection: true})
 
-
 export default function Board(props) {
   const [game, setGame] = useState(new Array(9).fill(null))
   const [turn, setTurn] = useState(true)
@@ -43,7 +42,7 @@ export default function Board(props) {
       setVisitors(visitors)
       
       setScores(scores)
-
+      // alert(permission)
       setTurn(permission === 'new' ? true : false)
       console.log(permission)
       setPiece(permission === 'new' ? 'O' : 'X')
@@ -53,11 +52,12 @@ export default function Board(props) {
 
     //Game play logic events
     socket.on('update', (board, pieceParam) => {
+      console.log(players);
       handleUpdate(board, pieceParam)
     })
     socket.on('win', (winner) => {
       console.log(winner);
-      setStatusMessage(`${winner.name} wins`)
+      setStatusMessage(`${winner} wins`)
       setEnd(true)
     })
     socket.on('over', () => {
@@ -92,11 +92,15 @@ export default function Board(props) {
     funcSetBoard(board)
     
     funcSetTurn(pieceParam)
-  
+    console.log(players);
     if (handleWin(board)) {
-      alert(piece, "FORRRRR PIECE")
-      alert(pieceParam, "FORRRRR PIECE")
+    
       console.log(players)
+      socket.emit('playerspl')
+      socket.on('playerss',(players)=>{
+        setPlayers(players)
+      })
+
       var winner = piece === 'O' ? players[0] : players[1]
 
       socket.emit('win', winner)
@@ -127,6 +131,7 @@ export default function Board(props) {
     for (var i = 0; i < winStates.length; i++) {
       var winstate = winStates[i];
       console.log(piece)
+      console.log(winstate[0]);
       if (board[winstate[0]] === piece
         && board[winstate[1]] === piece
         && board[winstate[2]] === piece) {
@@ -139,8 +144,8 @@ export default function Board(props) {
 
   const playAgainRequest = () => {
     console.log('requestfor playagain');
-
-    socket.emit('playAgainRequest')
+    setRedirect(true)
+    // socket.emit('playAgainRequest')
   }
 
   //Handle the restart event from the back end
@@ -205,7 +210,7 @@ export default function Board(props) {
         <div className="board">
           {squareArray}
         </div>
-        <ScoreBoard data={{player1: [players[0]['name'], players[0]['score']], player2: [players[1]['name'],players[1]['scores']]}}/>
+        <ScoreBoard data={{player1: [players[0]['name'], players[0]['score']], player2: [players[1]['name'],players[1]['score']]}}/>
         <Visitors visitors={visitors}/>
         <PlayAgain end={end} onClick={playAgainRequest}/>
       </>

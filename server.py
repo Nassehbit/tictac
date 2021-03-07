@@ -56,31 +56,28 @@ def newGame(name):
     global gameStatus
     global players
     gameStatus = True
-    try:
-        user=models.User.query.filter_by(username=name).first()
-        if user:
-            print(user)
-            players.append({'name':user.username,'score':user.rank_score})
 
-            user.rank_score += 1
-            db.session.commit()
-            return socketio.emit('newGameCreated')
+    user=models.User.query.filter_by(username=name).first()
+    if user:
+        print(user)
+       
+        players.append({'name':user.username,'score':user.rank_score})
+        # return socketio.emit('newGameCreated')
             # return players.append( jsonify(user.serialize()))
-        else:
-            print('HEERER')
-            new_user = models.User(username = name,rank_score = 100)
-            # print('creted')
-            db.session.add(new_user)
-            print(db.session.commit())
-            print('done')
-            # user=models.User.query.filter_by(username=name).first()
-            players.append({'name':new_user.username,'score':new_user.rank_score})
-            # players.append(name)
-            return socketio.emit('newGameCreated')
-    except Exception as e:
-	    return(str(e))
-   
-
+    else:
+        print('HEERER')
+        new_user = models.User(username = name,rank_score = 100)
+        # print('creted')
+        db.session.add(new_user)
+        print(db.session.commit())
+        print('done')
+        # user=models.User.query.filter_by(username=name).first()
+        players.append({'name':new_user.username,'score':new_user.rank_score})
+        # players.append(name)
+        # return socketio.emit('newGameCreated')
+    
+    print('emmmmimveinmcjn')
+    socketio.emit('newGameCreated')
 
 
 
@@ -169,7 +166,10 @@ def move(piece, index):
             turn = 'X'
         print(turn)
         socketio.emit('update', data=(board, turn))
-
+@socketio.on('playerspl')
+def playerspl():
+    socketio.emit('playerss',data=(players))
+    
 @socketio.on('win')
 def win(winner):
     update(winner)
