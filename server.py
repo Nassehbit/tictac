@@ -19,7 +19,7 @@ db = SQLAlchemy(app)
 import  models
 
 socketio = SocketIO(app, cors_allowed_origins="https://tictatoetac.herokuapp.com,tictatoetac.herokuapp.com")
-CORS(app)
+CORS(app, resources={r"*": {"origins": "*"}})
 
 #variables
 
