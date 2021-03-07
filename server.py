@@ -18,7 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 import  models
 SocketIO.connect()
-socketio = SocketIO(app, cors_allowed_origins="*",engineio_logger=True,logger=True)
+socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
 #variables
