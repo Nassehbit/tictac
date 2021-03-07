@@ -11,7 +11,8 @@ import qs from 'qs'
 import socketIOClient from 'socket.io-client';
 import Visitors from '../functional/Visitor';
 
-const ENDPOINT = 'http://127.0.0.1:8081'
+// const ENDPOINT = 'http://127.0.0.1:8081'
+const ENDPOINT = 'https://tictacflask.herokuapp.com'
 const socket = socketIOClient(ENDPOINT, {reconnection: true})
 
 export default function Board(props) {
