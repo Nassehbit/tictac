@@ -18,8 +18,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 import  models
 
-socketio = SocketIO(app, cors_allowed_origins="https://tictatoetac.herokuapp.com,tictatoetac.herokuapp.com")
-CORS(app, resources={r"*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app)
 
 #variables
 
