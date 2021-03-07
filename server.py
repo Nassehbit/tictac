@@ -64,7 +64,7 @@ def newGame(name):
 
             user.rank_score += 1
             db.session.commit()
-            return socketio.emit('newGameCreated')
+            return socketio.emit('newGameCreated' ,broadcast=True)
             # return players.append( jsonify(user.serialize()))
         else:
             print('HEERER')
@@ -76,7 +76,7 @@ def newGame(name):
             # user=models.User.query.filter_by(username=name).first()
             players.append({'name':new_user.username,'score':new_user.rank_score})
             # players.append(name)
-            return socketio.emit('newGameCreated')
+            return socketio.emit('newGameCreated', broadcast=True)
     except Exception as e:
 	    return(str(e))
    
