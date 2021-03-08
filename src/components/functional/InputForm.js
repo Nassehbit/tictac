@@ -8,8 +8,8 @@ import ChoiceButton from './ChoiceButton'
 import ScoreBoardleader from '../functional/scoreboardleader'
 // import socket from '../pages/Board'
 import socketIOClient from 'socket.io-client';
-// const ENDPOINT = 'http://127.0.0.1:8081'
-const ENDPOINT ='https://tictacflask.herokuapp.com'
+const ENDPOINT = 'http://127.0.0.1:8081'
+// const ENDPOINT ='https://tictacflask.herokuapp.com'
 const socket = socketIOClient(ENDPOINT, {reconnection: false})
 
 

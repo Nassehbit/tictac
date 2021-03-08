@@ -10,8 +10,8 @@ import { Redirect } from 'react-router-dom'
 
 import socketIOClient from 'socket.io-client'
 
-// const ENDPOINT = 'http://127.0.0.1:8081'
-const ENDPOINT ='https://tictacflask.herokuapp.com/'
+const ENDPOINT = 'http://127.0.0.1:8081'
+// const ENDPOINT ='https://tictacflask.herokuapp.com/'
 const socket = socketIOClient(ENDPOINT)
 
 export default function Start(props) {
